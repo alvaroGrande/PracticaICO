@@ -20,24 +20,11 @@ public class menu {
 			break;
 		case 2:
 			System.out.println("Deber introduciar cada numero de cada fila separada por un espacio");
-			for(int i=1; i<=3; i++) {
-				String fila = leeMatriz();
-				String[] row = fila.split(" ");
-				matriz[i-1][0] = Integer.parseInt(row[0]);
-				matriz[i-1][1] = Integer.parseInt(row[1]);
-				matriz[i-1][2] = Integer.parseInt(row[2]);
-			}
+			guardarMatriz();
 			break;
 		case 3:
 			System.out.println("Deber introduciar cada numero de cada fila separada por un espacio");
-			for(int i=1; i<=3; i++) {
-				String fila = leeMatriz();
-				String[] row = fila.split(" ");
-				matriz[i-1][0] = Integer.parseInt(row[0]);
-				matriz[i-1][1] = Integer.parseInt(row[1]);
-				matriz[i-1][2] = Integer.parseInt(row[2]);
-			}
-			break;
+			guardarMatriz();
 
 		default:
 			System.out.println("No ha elegido una opcion valida");
