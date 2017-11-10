@@ -21,10 +21,14 @@ public class menu {
 		case 2:
 			System.out.println("Deber introduciar cada numero de cada fila separada por un espacio");
 			guardarMatriz();
+			if(conprobarMatriz(matriz))
+				pintarMatriz(matriz);
 			break;
 		case 3:
 			System.out.println("Deber introduciar cada numero de cada fila separada por un espacio");
 			guardarMatriz();
+			if(conprobarMatriz(matriz))
+				pintarMatriz(matriz);
 
 		default:
 			System.out.println("No ha elegido una opcion valida");
