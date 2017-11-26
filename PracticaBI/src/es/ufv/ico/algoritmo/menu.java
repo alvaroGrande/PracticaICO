@@ -1,11 +1,17 @@
-package es.ufv.ico.menu;
+package es.ufv.ico.algoritmo;
 
 import java.util.Scanner;
 
 public class menu {
-	static int matriz[][] = new int[3][3];
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+	private  int[][] matriz_inicial= new int [3][3];
+	private static int matriz_final[][] = new int[3][3];
+	private int[][] matriz;
+		public menu () {
+			System.out.println("aa");
+			inicio();
+			
+		}
+		public void inicio() {
 		pintarMenu();
 		Scanner scanner = new Scanner(System.in);
 		
@@ -15,12 +21,15 @@ public class menu {
 		case 1:
 			System.out.println("Deber introduciar cada numero de cada fila separada por un espacio");
 			guardarMatriz();
-			if(conprobarMatriz(matriz))
-				pintarMatriz(matriz);
+			
+			if(comprobarMatriz(matriz_inicial))
+				pintarMatriz(matriz_inicial);
+				
 			break;
 		case 2:
 			System.out.println("Deber introduciar cada numero de cada fila separada por un espacio");
 			guardarMatriz();
+			pintarMatriz(matriz_inicial);
 			break;
 		case 3:
 			System.out.println("Deber introduciar cada numero de cada fila separada por un espacio");
@@ -34,24 +43,30 @@ public class menu {
 
 	}
 	
-	private static void guardarMatriz() {
-		for(int i=1; i<=3; i++) {
+	public  void guardarMatriz() {
+
+		for(int i=0; i<3; i++) {
 			String fila = leeMatriz();
-			String[] row = fila.split(" ");
-			matriz[i-1][0] = Integer.parseInt(row[0]);
-			matriz[i-1][1] = Integer.parseInt(row[1]);
-			matriz[i-1][2] = Integer.parseInt(row[2]);
-			if(row[0] == row[1] || row[0] == row[2] || row[1] == row[2]) {
-				System.out.println("Lo numero deben ser distinto");
+
+			String[] row =fila.split(" ");
+			for(int j=0;j<row.length;j++) {
+			matriz_inicial[i][j] = Integer.parseInt(row[j]);
+			matriz_inicial[i][j] = Integer.parseInt(row[j]);
+			matriz_inicial[i][j] = Integer.parseInt(row[j]);
 			}
+			if(row[0] == row[1] || row[0] == row[2] || row[1] == row[2]) {
+				System.out.println("Lo numero deben ser distintos");
+			}
+
 		}
 		
 	}
 
-	private static boolean conprobarMatriz(int[][] matriz) {
+	public    boolean comprobarMatriz(int[][] matriz) {
 		boolean num = true;
 		for(int i= 1; i<3; i++) {
 			for(int j= 1; j<3; j++) {
+
 				if(matriz[i-1][j-1] == matriz[i][j])
 				{ num = false;}
 					
@@ -62,7 +77,7 @@ public class menu {
 
 	}
 
-	private static void pintarMenu() {
+	public    void pintarMenu() {
 		System.out.println("Seleccione una opcion\n");
 		System.out.println("1. Dijkstra");
 		System.out.println("2. Greedy");
@@ -74,17 +89,30 @@ public class menu {
 		return scanner.nextLine();
 	}
 
-	private static void pintarMatriz(int[][] matriz) {
+	public int[][] pintarMatriz(int[][] m) {
 		System.out.println("/------------------/");
+		System.out.println(m);
 		for(int i= 0; i<3; i++) {
 			for(int j= 0; j<3; j++) {
 				System.out.print(" | ");
-				System.out.print(matriz[i][j]);
+				System.out.print(m[i][j]);
 				System.out.print(" | ");
 			}
 			System.out.println("");
 		}
 		System.out.println("/------------------/");
+		matriz_inicial=m;
+
+		setMatriz(matriz_inicial);
+		return matriz;
+	}
+	
+	public int[][] getMatriz() {
+		return matriz_inicial;
 	}
 
-}
+	public void setMatriz(int[][] matriz_inicial) {
+		this.matriz_inicial = matriz_inicial;
+	}
+
+	}
