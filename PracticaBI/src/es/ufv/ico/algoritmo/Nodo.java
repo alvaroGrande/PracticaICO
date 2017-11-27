@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 public class Nodo  {
 
-	private int g;
-	private int h;
-	private int f;
+	private double g;
+	private double h;
+	private double f;
 	
 	private Puzzle puzzle;
 	private Puzzle objetivo;
-	private ArrayList<Nodo> hijos;
+
 	
 	private Nodo padre ;
 	
@@ -18,12 +18,16 @@ public class Nodo  {
 	/*Cada nodo contiene el Puzzle ,  G=Coste , H=Heuristica y F*/
 	public Nodo(Puzzle puzzle_actual,int g , int h , int f) {
 		
-		System.out.println("aa " + puzzle_actual.getPuzzleActual()[1][1]);
-		ArrayList<Nodo> hijos= new ArrayList<>();
+		ArrayList<Nodo> sucesores= new ArrayList<>();
 		Nodo n = new Nodo();
 		n.setPuzzle(puzzle_actual);
-		hijos=explorar_hijos(n);
-		
+		n.setH(n.getPuzzle().Heuristico(puzzle_actual));
+		n.setG(0);
+		double sumaG=n.getF()+n.getH();
+		n.setF( sumaG);
+		System.out.println(n.getH());
+
+		sucesores=explorar_sucesores(n);
 		
 	}
 	
@@ -40,79 +44,135 @@ public class Nodo  {
 	 * ORDENARLOS EN UN Array de "Abiertos" o "Cerrados" en funcion de su F total
 	 * 
 	 * */
-	public ArrayList<Nodo> explorar_hijos(Nodo padre){
+	public ArrayList<Nodo> explorar_sucesores(Nodo padre){
 		
+		ArrayList<Nodo> sucesores= new ArrayList<>();
 		
 		Puzzle p;
 		Nodo hijo;
 		
-		//copio el puzzle actual 
-		//determino la posicion de la ficha 0
-		//creo los hijos en funcion de si se puede mover :IZQ,DERECHA,ARRIBA,ABAJO
+		//1.copio el puzzle actual 
+		//2.determino la posicion de la ficha 0
+		//3.creo los hijos en funcion de si se puede mover :IZQ,DERECHA,ARRIBA,ABAJO
 		//para cada movimiento creo un Hijo
-		
+		//4.Comparo si es igual que el padre
+		//5.si no son iguales calculo H y le agrego su padre
+		//lo agrego a array Sucesores
 		
 		hijo=new Nodo();
 		p=padre.getPuzzle().transladar(padre.getPuzzle(),1, 0);
 		hijo.setPuzzle(p);
-		hijo.getPuzzle().imprimePuzzle(hijo.getPuzzle().getPuzzleActual());
-		hijo.setPadre(padre);
-		hijos.add(hijo);
+		if(p.comparaPosiciones(padre.getPuzzle(), hijo.getPuzzle())) {
+			hijo.getPuzzle().imprimePuzzle(hijo.getPuzzle().getPuzzleActual());
+			hijo.setH(hijo.getPuzzle().Heuristico(hijo.getPuzzle()));
+			
+			hijo.setPadre(padre);
+			sucesores.add(hijo);
+			System.out.println(hijo.getH());
 
+		}
+		else {
+			System.out.println("Hijo es igual que el padre");
+		}
+		
+		
+		
+		
+		
+		
+		
 		
 		hijo=new Nodo();
 		p=padre.getPuzzle().transladar(padre.getPuzzle(),-1,0);
 		hijo.setPuzzle(p);
-		hijo.getPuzzle().imprimePuzzle(hijo.getPuzzle().getPuzzleActual());
-		hijo.setPadre(padre);
-		hijos.add(hijo);
+		if(p.comparaPosiciones(padre.getPuzzle(), hijo.getPuzzle())) {
+			hijo.getPuzzle().imprimePuzzle(hijo.getPuzzle().getPuzzleActual());
+			hijo.setH(hijo.getPuzzle().Heuristico(hijo.getPuzzle()));
+			
+			hijo.setPadre(padre);
+			sucesores.add(hijo);
+			System.out.println(hijo.getH());
 
+		}
+		else {
+			System.out.println("Hijo es igual que el padre");
+		}
+		
+		
+		
 		
 		hijo=new Nodo();
 		p=padre.getPuzzle().transladar(padre.getPuzzle(),0,-1);
 		hijo.setPuzzle(p);
+		if(p.comparaPosiciones(padre.getPuzzle(), hijo.getPuzzle())) {
 		hijo.getPuzzle().imprimePuzzle(hijo.getPuzzle().getPuzzleActual());
+		hijo.setH(hijo.getPuzzle().Heuristico(hijo.getPuzzle()));
+			
 		hijo.setPadre(padre);
-		hijos.add(hijo);
+		sucesores.add(hijo);
+		System.out.println(hijo.getH());
 
+		}
+		else {
+			System.out.println("Hijo es igual que el padre");
+		}
+		
+		
+
+		
+		
+		
+		
 		
 		hijo=new Nodo();
 		p=padre.getPuzzle().transladar(padre.getPuzzle(),0,1);
 		hijo.setPuzzle(p);
-		hijo.getPuzzle().imprimePuzzle(hijo.getPuzzle().getPuzzleActual());
-		hijo.setPadre(padre);
-		hijos.add(hijo);
+
+		if(p.comparaPosiciones(padre.getPuzzle(), hijo.getPuzzle())) {
+			hijo.getPuzzle().imprimePuzzle(hijo.getPuzzle().getPuzzleActual());
+			hijo.setH(hijo.getPuzzle().Heuristico(hijo.getPuzzle()));
+			
+			hijo.setPadre(padre);
+			sucesores.add(hijo);
+			System.out.println(hijo.getH());
+
+		}
+		else {
+			System.out.println("Hijo es igual que el padre");
+		}
+		
+		
+		
 
 
 		
-		hijos.add(hijo);
 		
-		return hijos;
+		return sucesores;
 		
 	}
 	
 	
-	public int getG() {
+	public double getG() {
 		return g;
 	}
 
-	public void setG(int g) {
+	public void setG(double g) {
 		this.g = g;
 	}
 
-	public int getH() {
+	public double getH() {
 		return h;
 	}
 
-	public void setH(int h) {
+	public void setH(double h) {
 		this.h = h;
 	}
 
-	public int getF() {
+	public double getF() {
 		return f;
 	}
 
-	public void setF(int f) {
+	public void setF(double f) {
 		this.f = f;
 	}
 
