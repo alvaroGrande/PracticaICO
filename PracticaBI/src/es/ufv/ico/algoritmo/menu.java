@@ -6,46 +6,46 @@ public class menu {
 	private  int[][] matriz_inicial= new int [3][3];
 	private static int matriz_final[][] = new int[3][3];
 	private int[][] matriz;
-		public menu () {
-			System.out.println("aa");
-			inicio();
-			
-		}
-		public void inicio() {
+	public menu () {
+		//System.out.println("aa");
+		inicio();
+
+	}
+	public void inicio() {
 		pintarMenu();
 		Scanner scanner = new Scanner(System.in);
-		
+
 		int[] valoresIntroducidos;
 		int opcion = scanner.nextInt();
 		switch (opcion) {
 		case 1:
 			System.out.println("Deber introduciar cada numero de cada fila separada por un espacio");
 			guardarMatriz();
-			
+
 			if(comprobarMatriz(matriz_inicial))
 				pintarMatriz(matriz_inicial);
-				
+
 			break;
 		case 2:
 			System.out.println("Deber introduciar cada numero de cada fila separada por un espacio");
 			guardarMatriz();
-			if(conprobarMatriz(matriz))
+			if(comprobarMatriz(matriz))
 				pintarMatriz(matriz);
 			break;
 		case 3:
 			System.out.println("Deber introduciar cada numero de cada fila separada por un espacio");
 			guardarMatriz();
-			if(conprobarMatriz(matriz))
+			if(comprobarMatriz(matriz))
 				pintarMatriz(matriz);
 
 		default:
 			System.out.println("No ha elegido una opcion valida");
 			break;
 		}
-		
+
 
 	}
-	
+
 	public  void guardarMatriz() {
 
 		for(int i=0; i<3; i++) {
@@ -53,16 +53,16 @@ public class menu {
 
 			String[] row =fila.split(" ");
 			for(int j=0;j<row.length;j++) {
-			matriz_inicial[i][j] = Integer.parseInt(row[j]);
-			matriz_inicial[i][j] = Integer.parseInt(row[j]);
-			matriz_inicial[i][j] = Integer.parseInt(row[j]);
+				matriz_inicial[i][j] = Integer.parseInt(row[j]);
+				matriz_inicial[i][j] = Integer.parseInt(row[j]);
+				matriz_inicial[i][j] = Integer.parseInt(row[j]);
 			}
 			if(row[0] == row[1] || row[0] == row[2] || row[1] == row[2]) {
 				System.out.println("Lo numero deben ser distintos");
 			}
 
 		}
-		
+
 	}
 
 	public    boolean comprobarMatriz(int[][] matriz) {
@@ -72,8 +72,8 @@ public class menu {
 
 				if(matriz[i-1][j-1] == matriz[i][j])
 				{ num = false;}
-					
-				
+
+
 			}
 		}
 		return num;
@@ -109,7 +109,7 @@ public class menu {
 		setMatriz(matriz_inicial);
 		return matriz;
 	}
-	
+
 	public int[][] getMatriz() {
 		return matriz_inicial;
 	}
@@ -118,4 +118,4 @@ public class menu {
 		this.matriz_inicial = matriz_inicial;
 	}
 
-	}
+}
