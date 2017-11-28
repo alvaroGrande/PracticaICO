@@ -1,6 +1,8 @@
 package es.ufv.ico.algoritmo;
 
 import es.ufv.ico.algoritmo.menu;
+
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Puzzle {
@@ -31,8 +33,9 @@ public class Puzzle {
 		p.setPuzzleActual(puzzleActual);
 		p.calcula0(puzzleActual);
 
-		Nodo n = new Nodo(p, 0, 0, 0);
+		Nodo n = new Nodo(p, 0, 0, 0, new ArrayList<Nodo>() , null);
 		n.setPadre(null);
+		
 		
 	}
 
