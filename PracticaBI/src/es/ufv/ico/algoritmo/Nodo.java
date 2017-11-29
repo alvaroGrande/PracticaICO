@@ -1,6 +1,9 @@
 package es.ufv.ico.algoritmo;
 
+import java.security.cert.CollectionCertStoreParameters;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Nodo  {
 
@@ -10,25 +13,34 @@ public class Nodo  {
 	
 	private Puzzle puzzle;
 	private Puzzle objetivo;
+	private List<Nodo> listaAbiertos = new ArrayList<>();
+	private List<Nodo> listaCerrados = new ArrayList<>();
 
-	
 	private Nodo padre ;
-	
+	private List<Nodo> sucesores=new ArrayList<>();
 	
 	/*Cada nodo contiene el Puzzle ,  G=Coste , H=Heuristica y F*/
-	public Nodo(Puzzle puzzle_actual,int g , int h , int f) {
+	public Nodo(Puzzle puzzle_actual,int g , int h , int f,ArrayList<Nodo> suc,Nodo padr) {
 		
-		ArrayList<Nodo> sucesores= new ArrayList<>();
+//		ArrayList<Nodo> sucesores= new ArrayList<>();
+		ArrayList<Nodo> abiertos=new ArrayList<>();
 		Nodo n = new Nodo();
 		n.setPuzzle(puzzle_actual);
 		n.setH(n.getPuzzle().Heuristico(puzzle_actual));
+		
+		//puzzle Inicial
 		n.setG(0);
+		
 		double sumaG=n.getF()+n.getH();
-		n.setF( sumaG);
-		System.out.println(n.getH());
+		n.setF(sumaG);
 
 		sucesores=explorar_sucesores(n);
+		n.setSucesores(sucesores);
+		listaCerrados.add(n);
+
 		
+		
+
 	}
 	
 	public Nodo() {
@@ -44,7 +56,7 @@ public class Nodo  {
 	 * ORDENARLOS EN UN Array de "Abiertos" o "Cerrados" en funcion de su F total
 	 * 
 	 * */
-	public ArrayList<Nodo> explorar_sucesores(Nodo padre){
+	public ArrayList<Nodo> explorar_sucesores(Nodo padr){
 		
 		ArrayList<Nodo> sucesores= new ArrayList<>();
 		
@@ -59,14 +71,42 @@ public class Nodo  {
 		//5.si no son iguales calculo H y le agrego su padre
 		//lo agrego a array Sucesores
 		
+		
+		
+		
+		//TRASLADO ABAJO
 		hijo=new Nodo();
-		p=padre.getPuzzle().transladar(padre.getPuzzle(),1, 0);
+		p=padr.getPuzzle().transladar(padr.getPuzzle(),1, 0);
 		hijo.setPuzzle(p);
-		if(p.comparaPosiciones(padre.getPuzzle(), hijo.getPuzzle())) {
+		if(p.comparaPosiciones(padr.getPuzzle(), hijo.getPuzzle())) {
 			hijo.getPuzzle().imprimePuzzle(hijo.getPuzzle().getPuzzleActual());
 			hijo.setH(hijo.getPuzzle().Heuristico(hijo.getPuzzle()));
 			
-			hijo.setPadre(padre);
+			hijo.setPadre(padr);
+			sucesores.add(hijo);
+			System.out.println(hijo.getH());
+			
+		}
+		else {
+			System.out.println("Hijo es igual que el padre");
+		}
+		
+		
+		
+		
+		
+		
+		//TRASLADO ARRIBA
+
+		
+		hijo=new Nodo();
+		p=padr.getPuzzle().transladar(padr.getPuzzle(),-1,0);
+		hijo.setPuzzle(p);
+		if(p.comparaPosiciones(padr.getPuzzle(), hijo.getPuzzle())) {
+			hijo.getPuzzle().imprimePuzzle(hijo.getPuzzle().getPuzzleActual());
+			hijo.setH(hijo.getPuzzle().Heuristico(hijo.getPuzzle()));
+			
+			hijo.setPadre(padr);
 			sucesores.add(hijo);
 			System.out.println(hijo.getH());
 
@@ -79,36 +119,18 @@ public class Nodo  {
 		
 		
 		
-		
-		
-		
-		hijo=new Nodo();
-		p=padre.getPuzzle().transladar(padre.getPuzzle(),-1,0);
-		hijo.setPuzzle(p);
-		if(p.comparaPosiciones(padre.getPuzzle(), hijo.getPuzzle())) {
-			hijo.getPuzzle().imprimePuzzle(hijo.getPuzzle().getPuzzleActual());
-			hijo.setH(hijo.getPuzzle().Heuristico(hijo.getPuzzle()));
-			
-			hijo.setPadre(padre);
-			sucesores.add(hijo);
-			System.out.println(hijo.getH());
+		//TRASLADO IZQUIERDA
 
-		}
-		else {
-			System.out.println("Hijo es igual que el padre");
-		}
-		
-		
-		
 		
 		hijo=new Nodo();
-		p=padre.getPuzzle().transladar(padre.getPuzzle(),0,-1);
+		p=padr.getPuzzle().transladar(padr.getPuzzle(),0,-1);
 		hijo.setPuzzle(p);
-		if(p.comparaPosiciones(padre.getPuzzle(), hijo.getPuzzle())) {
+		if(p.comparaPosiciones(padr.getPuzzle(), hijo.getPuzzle())) {
+		
 		hijo.getPuzzle().imprimePuzzle(hijo.getPuzzle().getPuzzleActual());
 		hijo.setH(hijo.getPuzzle().Heuristico(hijo.getPuzzle()));
 			
-		hijo.setPadre(padre);
+		hijo.setPadre(padr);
 		sucesores.add(hijo);
 		System.out.println(hijo.getH());
 
@@ -120,19 +142,20 @@ public class Nodo  {
 		
 
 		
-		
+		//TRASLADO DERECHA
+
 		
 		
 		
 		hijo=new Nodo();
-		p=padre.getPuzzle().transladar(padre.getPuzzle(),0,1);
+		p=padr.getPuzzle().transladar(padr.getPuzzle(),0,1);
 		hijo.setPuzzle(p);
 
-		if(p.comparaPosiciones(padre.getPuzzle(), hijo.getPuzzle())) {
+		if(p.comparaPosiciones(padr.getPuzzle(), hijo.getPuzzle())) {
 			hijo.getPuzzle().imprimePuzzle(hijo.getPuzzle().getPuzzleActual());
 			hijo.setH(hijo.getPuzzle().Heuristico(hijo.getPuzzle()));
 			
-			hijo.setPadre(padre);
+			hijo.setPadre(padr);
 			sucesores.add(hijo);
 			System.out.println(hijo.getH());
 
@@ -144,10 +167,26 @@ public class Nodo  {
 		
 		
 
+		System.out.println("padre" + padr.getPuzzle().getPuzzleActual()[2][0]);
 
 		
-		
 		return sucesores;
+		
+	}
+	
+	
+	public void meterAbiertos(ArrayList<Nodo> sucesores) {
+		
+		
+		
+		
+		for(int i=0;i<sucesores.size();i++) {
+			
+			
+		}
+		
+		
+		
 		
 	}
 	
@@ -198,6 +237,30 @@ public class Nodo  {
 
 	public void setPadre(Nodo padre) {
 		this.padre = padre;
+	}
+
+	public List<Nodo> getSucesores() {
+		return sucesores;
+	}
+
+	public void setSucesores(List<Nodo> sucesores) {
+		this.sucesores = sucesores;
+	}
+
+	public List<Nodo> getListaAbiertos() {
+		return listaAbiertos;
+	}
+
+	public void setListaAbiertos(ArrayList<Nodo> listaAbiertos) {
+		this.listaAbiertos = listaAbiertos;
+	}
+
+	public List<Nodo> getListaCerrados() {
+		return listaCerrados;
+	}
+
+	public void setListaCerrados(ArrayList<Nodo> listaCerrados) {
+		this.listaCerrados = listaCerrados;
 	}
 	
 	
