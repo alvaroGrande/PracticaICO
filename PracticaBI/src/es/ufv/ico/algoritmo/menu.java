@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class menu {
 	private  int[][] matriz_inicial= new int [3][3];
 	private static int matriz_final[][] = new int[3][3];
-	private int[][] matriz;
+	private static int[][] matriz;
 	public menu () {
 		//System.out.println("aa");
 		inicio();
@@ -46,19 +46,19 @@ public class menu {
 
 	}
 
-	public  void guardarMatriz() {
-
-		for(int i=0; i<3; i++) {
+	private static void guardarMatriz() {
+		for(int i=1; i<=3; i++) {
 			String fila = leeMatriz();
-
-			String[] row =fila.split(" ");
-			for(int j=0;j<row.length;j++) {
-				matriz_inicial[i][j] = Integer.parseInt(row[j]);
-				matriz_inicial[i][j] = Integer.parseInt(row[j]);
-				matriz_inicial[i][j] = Integer.parseInt(row[j]);
-			}
-			if(row[0] == row[1] || row[0] == row[2] || row[1] == row[2]) {
-				System.out.println("Lo numero deben ser distintos");
+			String[] row = fila.split(" ");
+			try{
+				matriz[i-1][0] = Integer.parseInt(row[0]);
+				matriz[i-1][1] = Integer.parseInt(row[1]);
+				matriz[i-1][2] = Integer.parseInt(row[2]);
+				if(row[0] == row[1] || row[0] == row[2] || row[1] == row[2]) {
+					System.out.println("Lo numero deben ser distinto");
+				}
+			}catch (Exception e) {
+				System.out.println(row.toString() + "Debe ser un numero");
 			}
 
 		}
