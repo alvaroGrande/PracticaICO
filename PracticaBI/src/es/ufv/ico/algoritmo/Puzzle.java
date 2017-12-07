@@ -18,6 +18,7 @@ public class Puzzle {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		
 
 		menu m = new menu();
 		int[][] puzzleActual;
@@ -28,13 +29,13 @@ public class Puzzle {
 		rellenaPuzzleSol();
 		
 		Puzzle p = new Puzzle();
+		System.out.println("Puzzle Solucion : "  );
 		imprimePuzzle(puzzleSolucion);
 
 		p.setPuzzleActual(puzzleActual);
 		p.calcula0(puzzleActual);
 
-		Nodo n = new Nodo(p, 0, 0, 0, new ArrayList<Nodo>() , null);
-		n.setPadre(null);
+		Nodo n = new Nodo(p, 0, 0, 0, new ArrayList<Nodo>() , null,0);
 		
 		
 	}
@@ -154,12 +155,12 @@ public class Puzzle {
 		puzzleSolucion[0][0]=1;
 		puzzleSolucion[0][1]=2;
 		puzzleSolucion[0][2]=3;
-		puzzleSolucion[1][0]=4;
-		puzzleSolucion[1][1]=5;
-		puzzleSolucion[1][2]=6;
+		puzzleSolucion[1][0]=8;
+		puzzleSolucion[1][1]=0;
+		puzzleSolucion[1][2]=4;
 		puzzleSolucion[2][0]=7;
-		puzzleSolucion[2][1]=8;
-		puzzleSolucion[2][2]=0;
+		puzzleSolucion[2][1]=6;
+		puzzleSolucion[2][2]=5;
 		
 
 		
@@ -200,7 +201,9 @@ public class Puzzle {
 	public double Heuristico(Puzzle puzzle){
 		 // Algoritmo que calcula la suma de las distancias manhattan
 		 // hasta la solucion
-		double suma = 0;
+		double suma = 0.0000;
+		if(menu.getHeuristica()!=null) {
+		if(menu.getHeuristica().equals("2")) {
 		for (int i = 0; i < puzzle.getPuzzleActual().length; ++i) {
 			for (int j = 0; j < puzzle.getPuzzleActual()[i].length; ++j) {
 				if (puzzleSolucion[i][j] != puzzle.getPuzzleActual()[i][j]) {
@@ -215,20 +218,66 @@ public class Puzzle {
 					}
 					// En [i2][j2] está la posición correcta
 					suma += Math.abs(i2 - i) + Math.abs(j2 - j);
+					
 				}
 			}
+		}
+		}
+		else if(menu.getHeuristica().equals("1")) {
+			       
+			        int numeroPuzzle = 0;
+			        int numeroSolucion = 0;
+			        for (int i = 0; i < puzzle.getPuzzleActual().length; i++) {
+			        	for(int j=0;j<puzzle.getPuzzleActual()[i].length;j++) {
+			            numeroPuzzle = puzzle.getPuzzleActual()[i][j];
+			            numeroSolucion = puzzleSolucion[i][j];
+			            if (numeroPuzzle != numeroSolucion) {
+			                suma++;
+			            }
+			        }
+			    
+		}
+		}
+		}
+		else {
+			return 0;
 		}
 		return suma;
 	}
 	
 	
+	public static double Calcular_H2(Puzzle puzzle) { 
+        double h2 = 0;
+        int x = 0;
+        int y = 0;
+        int calculo_pos = 0;
+
+        for (int i = 0; i < puzzleSolucion.length; i++) {
+            for (int j = 0; j < puzzleSolucion[i].length; j++) {
+                if (puzzleSolucion[i][j] == puzzle.getPuzzleActual()[i][j]) {
+                    x = i ;
+                    y = j;
+                    if (x < 0) {
+                        x = x * -1;
+                    }
+                    if (y < 0) {
+                        y = y * -1;
+                    }
+                    calculo_pos = x + y;
+                    h2 = h2 + calculo_pos;
+                }
+            }
+        }
+        return h2;
+    }
 	
-	public boolean comparaPosiciones( Puzzle padre,Puzzle sucesor ){
-		boolean b=false;
+	
+	public static boolean comparaPosiciones( Puzzle padre,Puzzle sucesor ){
+		boolean b=true;
 			for (int i = 0; i < padre.getPuzzleActual().length; ++i) {
 				for (int j = 0; j < padre.getPuzzleActual()[i].length; ++j) {
 					if (padre.getPuzzleActual()[i][j] != sucesor.getPuzzleActual()[i][j]) {
-						b=true;
+						b=false;
 					}
 				}
 			}
