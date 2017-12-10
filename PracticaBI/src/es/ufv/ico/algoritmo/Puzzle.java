@@ -2,7 +2,14 @@ package es.ufv.ico.algoritmo;
 
 import es.ufv.ico.algoritmo.menu;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 
 public class Puzzle {
@@ -10,33 +17,94 @@ public class Puzzle {
 	private static int puzzleInicial[][] = new int[3][3];
 	private int[][] puzzleActual;
 	private static int[][] puzzleSolucion = new int[3][3];;
-
+	public static final String ruta_fichero = "C:/Users/Jorge Gonzalez.JORGEGONZALEZ/Desktop/fichero.txt";
+	
+	public static final File archivo = new File(ruta_fichero);
 	private int x0; // coordenada x ficha 0
 	private int y0; // coordenada y ficha 0
 
 	static Nodo n;
+	public static   String newLine = System.getProperty("line.separator");
+	public static FileWriter fw;
+	public static BufferedWriter bw;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
+		fw = new FileWriter(archivo);
+		bw= new BufferedWriter(fw);
 		
-
 		menu m = new menu();
 		int[][] puzzleActual;
-
+//		SimpleDateFormat fecha1= new SimpleDateFormat("dd-MM-yyyy");
+		DateFormat fecha1 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		Date date = new Date();
+		bw.write(newLine);
+		Date fecha =new Date();
+		bw.write("Jorge Gonzalez Pizarro" +" , Grupo Predeterminado ,"+" Fecha de ejecución = "+ (fecha1.format(fecha)) + newLine + newLine);
 		
-		puzzleInicial = m.getMatriz();
-		puzzleActual = puzzleInicial;
-		rellenaPuzzleSol();
+//		puzzleInicial = m.getMatriz();
+//		puzzleActual = puzzleInicial;
+//		rellenaPuzzleSol();
+//		
+//		Puzzle p = new Puzzle();
+//		System.out.println("Puzzle Solucion : "  );
+//		imprimePuzzle(puzzleSolucion);
+//		
+//		p.setPuzzleActual(puzzleActual);
+//		p.calcula0(puzzleActual);
+//		escribePuzzle(puzzleActual);
 		
-		Puzzle p = new Puzzle();
-		System.out.println("Puzzle Solucion : "  );
-		imprimePuzzle(puzzleSolucion);
+			Puzzle p = new Puzzle();
+			
+		if(menu.getMetodo().equals("1") || menu.getMetodo().equals("3")) {
+			menu.setHeuristica("1");
+			for(int i=0;i<2;i++) {
+				puzzleInicial = m.getMatriz();
+				puzzleActual = puzzleInicial;
+				rellenaPuzzleSol();
+				
+				
+				System.out.println("Puzzle Solucion : "  );
+				imprimePuzzle(puzzleSolucion);
+				
+				p.setPuzzleActual(puzzleActual);
+				p.calcula0(puzzleActual);
+				bw.write("PUZZLE INICIAL  :" + newLine );
+				escribePuzzle(puzzleActual);
 
-		p.setPuzzleActual(puzzleActual);
-		p.calcula0(puzzleActual);
+				bw.write("Algoritmo Elegido : " + menu.getMetodo() + newLine );
+				
+				bw.write("Heuristica  : H" + menu.getHeuristica() + newLine +newLine +newLine  );
 
-		Nodo n = new Nodo(p, 0, 0, 0, new ArrayList<Nodo>() , null,0);
+				Nodo n = new Nodo(p, 0, 0, 0, new ArrayList<Nodo>() , null,0);
+			
+			menu.setHeuristica("2");
+			//bw.close();
+		}
+		}
+			else {
+				puzzleInicial = m.getMatriz();
+				puzzleActual = puzzleInicial;
+				rellenaPuzzleSol();
+				
+				
+				System.out.println("Puzzle Solucion : "  );
+				imprimePuzzle(puzzleSolucion);
+				
+				p.setPuzzleActual(puzzleActual);
+				p.calcula0(puzzleActual);
+				bw.write("PUZZLE INICIAL  :" + newLine );
+				escribePuzzle(puzzleActual);
+
+				bw.write("Algoritmo Elegido : " + menu.getMetodo() + newLine );
+				
+
+			
+				Nodo n = new Nodo(p, 0, 0, 0, new ArrayList<Nodo>() , null,0);
+
+			}
 		
+		bw.close();
 		
 	}
 
@@ -179,7 +247,22 @@ public class Puzzle {
 			System.out.println("");
 		}
 	}
-	
+	public static void escribePuzzle(int[][] puzzle) throws IOException {
+		
+			bw.write(newLine);
+
+		 bw.write("/------------------/");
+			bw.write(newLine);
+
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				bw.write(" | ");
+				bw.write(Integer.toString(puzzle[i][j]));
+				bw.write(" | ");
+			}
+			bw.write(newLine);
+		}
+	}
 	
 	public boolean comparaPuzzle(Puzzle puzzle) {
 		boolean b=true;

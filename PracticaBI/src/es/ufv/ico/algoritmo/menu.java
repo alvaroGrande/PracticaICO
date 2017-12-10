@@ -1,5 +1,9 @@
 package es.ufv.ico.algoritmo;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
 public class menu {
@@ -8,40 +12,27 @@ public class menu {
 	private static String metodo;
 	private static String heuristica;
 	private int[][] matriz;
-		public menu () {
+		@SuppressWarnings("resource")
+		public menu () throws IOException {
 			//System.out.println("aa");
 			inicio();
-			
+			SimpleDateFormat fecha1= new SimpleDateFormat("dd-MM-yyyy");
+			 BufferedWriter bw;
+			 bw = new BufferedWriter(new FileWriter(Puzzle.archivo));
+				
 		}
 		public void inicio() {
 		pintarMenu();
 		Scanner scanner = new Scanner(System.in);
 		
-		int[] valoresIntroducidos;
-		//int opcion = scanner.nextInt();
-//		switch (opcion) {
-//		case 1:
+
 			System.out.println("Deber introduciar cada numero de cada fila separada por un espacio");
 			guardarMatriz();
 			
 			if(comprobarMatriz(matriz_inicial))
 				pintarMatriz(matriz_inicial);
 				
-//			break;
-//		case 2:
-//			System.out.println("Deber introduciar cada numero de cada fila separada por un espacio");
-//			guardarMatriz();
-//			pintarMatriz(matriz_inicial);
-//			break;
-//		case 3:
-//			System.out.println("Deber introduciar cada numero de cada fila separada por un espacio");
-//			guardarMatriz();
-//
-//		default:
-//			System.out.println("No ha elegido una opcion valida");
-//			break;
-//		}
-		
+
 
 	}
 	
@@ -82,16 +73,16 @@ public class menu {
 	public    String pintarMenu() {
 		System.out.println("Seleccione una opcion\n");
 		System.out.println("1. A*");
-		System.out.println("2. Greedy");
+		System.out.println("2. Dijkstra");
 		System.out.println("3. Avara");
 		metodo = leeMatriz();
 		System.out.println("Metodo escogido \n" + metodo);
-		if(metodo.equals("1") || metodo.equals("3")) {
-		System.out.println("Seleccione una heuristica\n");
-		heuristica=leeMatriz();
-		System.out.println("Heuristica escogida \n" + heuristica);
+//		if(metodo.equals("1") || metodo.equals("3")) {
+//		System.out.println("Seleccione una heuristica\n");
+//		heuristica=leeMatriz();
+//		System.out.println("Heuristica escogida \n" + heuristica);
 
-		}
+//		}
 		
 		return metodo;
 

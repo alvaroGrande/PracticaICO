@@ -1,5 +1,6 @@
 package es.ufv.ico.algoritmo;
 
+import java.io.IOException;
 import java.security.cert.CollectionCertStoreParameters;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,18 +23,19 @@ public class Nodo  implements Comparable<Nodo>{
 	private int operador;
 	private ArrayList<Nodo> camino = new ArrayList<>();
 	/*Cada nodo contiene el Puzzle ,  G=Coste , H=Heuristica y F*/
-	public Nodo(Puzzle puzzle_actual,double g , double h , double f,ArrayList<Nodo> suc,Nodo padr,int operador)  {
+	public Nodo(Puzzle puzzle_actual,double g , double h , double f,ArrayList<Nodo> suc,Nodo padr,int operador) throws IOException  {
 		Nodo n = new Nodo();
 		n.setPuzzle(puzzle_actual);
 		n.setH(n.getPuzzle().Heuristico(puzzle_actual));
 		n.setG(0);
+		
 		if(menu.getMetodo().equals("1")) {n.setF(n.getG()+n.getH());}
 		else if(menu.getMetodo().equals("2")) {n.setF(n.getG());}
 		else if(menu.getMetodo().equals("3")) {n.setF(n.getH());}
 		
 		n.setPadre(null);
 		listaAbiertos.add(n);
-		generados=1;
+		generados=generados+1;
 		while(!n.getPuzzle().comparaPuzzle(n.getPuzzle())) {
 		System.out.println("Padre ");
 		Puzzle.imprimePuzzle(n.getPuzzle().getPuzzleActual());
@@ -42,20 +44,24 @@ public class Nodo  implements Comparable<Nodo>{
 		n=escoger_nodo(menu.getMetodo(), n);
 		System.out.println(n.getPadre());
 			
-}
-		System.out.println(n.getOperador());
-
+}	
+		System.out.println(n.getOperador() +"\n");
+		
 		System.out.println("Acabado , nodo ganador ");
 		Puzzle.imprimePuzzle(n.getPuzzle().getPuzzleActual());
 		listaCerrados.add(n);
-		//System.out.print(n.getH() + " " +  n.getF());
 		System.out.println("Nº Nodos generados = " + generados);
 		System.out.println("Nº Nodos expandidos = " + explorados);
 		camino.add(n);
+		
 		recorrerCamino(n);
+		imprimeExplorados(listaCerrados);
 		imprimePadres(camino);
 		imprimeCamino(camino);
-		//imprimeExplorados();
+		int ultimo=camino.size()-1;
+		System.out.println(camino.get(0).getH());
+		Puzzle.bw.write(Puzzle.newLine+"HEURISTICA  ESTADO INICIAL " + camino.get(0).getH() + "   NUMERO DE MOVIMIENTOS" + Integer.toString(explorados)+ "    NODOS GENERADOS " + Integer.toString(generados) + Puzzle.newLine + Puzzle.newLine + Puzzle.newLine + Puzzle.newLine);
+
 	}
 	
 	public Nodo() {
@@ -71,9 +77,10 @@ public class Nodo  implements Comparable<Nodo>{
 				if(hijo.getF()<listaCerrados.get(i).getF()) {
 
 //				System.out.println("esta en cerrados y h es menor");
+				listaAbiertos.add(hijo);
+
 				listaCerrados.remove(i);
 				generados=generados+1;
-				listaAbiertos.add(hijo);
 				return true;
 		
 		}else {
@@ -101,7 +108,7 @@ public class Nodo  implements Comparable<Nodo>{
 
 				System.out.println("contiene en abiertos y h es menor");
 				listaAbiertos.add(hijo);
-				//generados=generados+1;
+				generados=generados+1;
 				listaAbiertos.remove(i);
 				
 				return true;
@@ -178,10 +185,16 @@ public class Nodo  implements Comparable<Nodo>{
 					
 					
 					if(!gestionarCola_Cerrados( hijo1)) {
-						if(!gestionarColaAbiertos(hijo1));
-					}
+						if(menu.getMetodo().equals("1")) {
+							if(!gestionarColaAbiertos( hijo1));
+							}
+							else{
+								listaAbiertos.add(hijo1);
+								generados=generados+1;
+							}
 					
 					
+				}
 				}
 				else {
 //						System.out.println("Hijo igual que el padre");
@@ -211,10 +224,16 @@ public class Nodo  implements Comparable<Nodo>{
 					
 					//compruebo si esta en cerrados (1)
 					if(!gestionarCola_Cerrados( hijo1)) {
-						if(!gestionarColaAbiertos( hijo1));
-					}
+						if(menu.getMetodo().equals("1")) {
+							if(!gestionarColaAbiertos( hijo1));
+							}
+							else{
+								generados=generados+1;
+								listaAbiertos.add(hijo1);
+							}
 					
 					
+				}
 				}
 				else {
 //						System.out.println("Hijo igual que el padre");
@@ -250,11 +269,16 @@ public class Nodo  implements Comparable<Nodo>{
 			//compruebo si esta en cerrados (1)
 			
 			if(!gestionarCola_Cerrados( hijo1)) {
-				if(!gestionarColaAbiertos( hijo1));
-					
-			}
+				if(menu.getMetodo().equals("1")) {
+					if(!gestionarColaAbiertos( hijo1));
+					}
+					else{
+						listaAbiertos.add(hijo1);
+						generados=generados+1;
+					}
 			
 			
+		}
 		}
 		else {
 //				System.out.println("Hijo igual que el padre");
@@ -282,7 +306,13 @@ public class Nodo  implements Comparable<Nodo>{
 			
 		
 			if(!gestionarCola_Cerrados( hijo1)) {
+				if(menu.getMetodo().equals("1")) {
 				if(!gestionarColaAbiertos( hijo1));
+				}
+				else{
+					listaAbiertos.add(hijo1);
+					generados=generados+1;
+				}
 			}
 			
 			
@@ -304,11 +334,7 @@ public class Nodo  implements Comparable<Nodo>{
 		
 		
 			Collections.sort(listaAbiertos);
-//			System.out.println("a" + listaAbiertos.size());
 
-//			System.out.println(" b "+ listaAbiertos.size());
-
-//		return listaAbiertos;
 		
 	}	
 
@@ -317,23 +343,17 @@ public class Nodo  implements Comparable<Nodo>{
 		
 		
 		if(metodo.equals("1")){
-//			System.out.println("c " +listaAbiertos.size());
 			n=listaAbiertos.get(0);
-//			System.out.println(n.getH() + " " + n.getG() + " " + n.getF());
 			
 		}
 		else if(metodo.equals("2")){
-//			System.out.println("c " +listaAbiertos.size());
 			n=listaAbiertos.get(0);
-//			System.out.println(n.getH() + " " + n.getG() + " " + n.getF());
 			
 			
 		}
 		else if(metodo.equals("3")){
 			
-//			System.out.println("c " +listaAbiertos.size());
 			n=listaAbiertos.get(0);
-//			System.out.println(n.getH() + " " + n.getG() + " " + n.getF());
 			
 		}
 		return n;
@@ -418,19 +438,24 @@ public class Nodo  implements Comparable<Nodo>{
 	}
 
 
-	public int compareTo(Nodo comparestu) {
+	public int compareTo(Nodo nodo) {
 		if(menu.getMetodo().equals("1")) {
-        double compareage=((Nodo)comparestu).getF();
+        double comparador=((Nodo)nodo).getF();
         /* For Ascending order*/
-        return (int) (this.f-compareage);
+        return (int) (this.f-comparador);
 		}
 		else if(menu.getMetodo().equals("2")) {
-			 double compareage=((Nodo)comparestu).getF();
+			 double comparador=((Nodo)nodo).getF();
 		        /* For Ascending order*/
-		        return (int) (this.f-compareage);
-		}
+			 	if((this.f-comparador)==0) {
+			 		int c=((Nodo)nodo).getOperador();
+			 		return (int) this.operador-c;
+			 	}else {
+		        return (int) (this.f-comparador);
+			 	}
+			 	}
 		else if(menu.getMetodo().equals("3")){
-			 double compareage=((Nodo)comparestu).getF();
+			 double compareage=((Nodo)nodo).getF();
 		        /* For Ascending order*/
 		        return (int) (this.f-compareage);
 				}
@@ -452,21 +477,30 @@ public class Nodo  implements Comparable<Nodo>{
 		return 0;
 	}
 	
+	/*CAMINO EN PUZZLES HASTA LA SOLUCION */
 	
-	public void imprimePadres(List<Nodo> camino) {
-//		for(int i=0;i<camino.size();i++) {
-		System.out.println("--------CAMINO SOLUCION------------\n");
+	public void imprimePadres(List<Nodo> camin) throws IOException {
+		Collections.reverse(camin);
+		//		for(int i=0;i<camino.size();i++) {
+		System.out.println("--------CAMINO SOLUCION------------\n" );
+		Puzzle.bw.write("--------CAMINO SOLUCION------------" + Puzzle.newLine +Puzzle.newLine +Puzzle.newLine);
+			for(int i = camin.size() ; i > 0; i--){
+			System.out.println("*******PASO " + (i-1) + "*******");
+			Puzzle.bw.write("---Paso" + Integer.toString(camin.size()-i) + "---\n");
+			Puzzle.imprimePuzzle(camin.get((camin.size()-i)).getPuzzle().getPuzzleActual());
+			Puzzle.escribePuzzle(camin.get((camin.size()-i)).getPuzzle().getPuzzleActual());
 
-			for(int i = camino.size() - 1; i >= 0; i--){
-			System.out.println("---Paso" + (camino.size()- i) + "---\n");
-
-			Puzzle.imprimePuzzle(camino.get(i).getPuzzle().getPuzzleActual());
-			System.out.println("F(n) = " + camino.get(i).getF());
-			System.out.println("G(n) = " + camino.get(i).getG());
-			System.out.println("H(n) = " + camino.get(i).getH());
-
+			System.out.println("F(n) = " + camin.get((camin.size()-i)).getF() + " ");
+			System.out.println("G(n) = " + camin.get((camin.size()-i)).getG()+ " ");
+			System.out.println("H(n) = " + camin.get((camin.size()-i)).getH());
+			
+			
+			Puzzle.bw.write("F(n) = " + camin.get((camin.size()-i)).getF()+ " ");
+			Puzzle.bw.write("G(n) = " + camin.get((camin.size()-i)).getG()+ " ");
+			Puzzle.bw.write("H(n) = " + camin.get((camin.size()-i)).getH()+ " ");
+			
 			String op;
-			switch (camino.get(i).getOperador()) {
+			switch (camin.get((camin.size()-i)).getOperador()) {
 			case 1:
 				op="derecha";
 				break;
@@ -482,12 +516,18 @@ public class Nodo  implements Comparable<Nodo>{
 			default:
 				op="Nodo Inicial";
 			}
-			System.out.println(op);
+			System.out.println(op+ " ");
+			Puzzle.bw.write(op+ " ");
+			Puzzle.bw.write(Puzzle.newLine +Puzzle.newLine);
+
 		}
+			
+			System.out.println("--------Nº PASOS DEL CAMINO " + (camin.size()-1) + "------------\n");
+			Puzzle.bw.write("--------Nº PASOS DEL CAMINO " + Integer.toString((camin.size()-1)) + "------------" + Puzzle.newLine);
 		}
 
-	
-	public void imprimeCamino(List<Nodo> camino) {
+	/*CAMINO EN PASOS HASTA LA SOLUCION*/
+	public void imprimeCamino(List<Nodo> camino) throws IOException {
 		for(int i=0;i<camino.size();i++) {
 			String op;
 			switch (camino.get(i).getOperador()) {
@@ -506,23 +546,28 @@ public class Nodo  implements Comparable<Nodo>{
 			default:
 				op="Nodo Inicial";
 			}
+
+			Puzzle.bw.write(op + " ->" );
 			System.out.println(op);
 		}
 	}
 	
 	
-	public void imprimeExplorados() {
+	/*PASOS EN LA BUSQUEDA DEL CAMINO = NUMERO DE NODOS EXPLORADOS*/
+	public void imprimeExplorados(List<Nodo> listaCerrado) {
+		Collections.reverse(listaCerrado);
 		System.out.println("--------NODOS EXPLORADOS------------\n");
+		for(int i=0;i< listaCerrado.size();i++) {
+	//	for(int i = listaCerrado.size()-1 ; i >=0; i--){
+			System.out.println("---Paso" + (listaCerrado.size() - i) + "---\n");
 
-		for(int i = listaCerrados.size() - 1; i >= 0; i--){
-			System.out.println("--------PASOS" + (listaCerrados.size()- i) + "------------\n");
+			Puzzle.imprimePuzzle(listaCerrado.get(i).getPuzzle().getPuzzleActual());
+			System.out.println("F(n) = " + listaCerrado.get(i).getF());
+			System.out.println("G(n) = " + listaCerrado.get(i).getG());
+			System.out.println("H(n) = " + listaCerrado.get(i).getH());
 
-			Puzzle.imprimePuzzle(listaCerrados.get(i).getPuzzle().getPuzzleActual());
-			System.out.println("F(n) = " + listaCerrados.get(i).getF());
-			System.out.println("G(n) = " + listaCerrados.get(i).getG());
-			System.out.println("H(n) = " + listaCerrados.get(i).getH());
 			String op;
-			switch (listaCerrados.get(i).getOperador()) {
+			switch (listaCerrado.get(i).getOperador()) {
 			case 1:
 				op="derecha";
 				break;
@@ -540,7 +585,11 @@ public class Nodo  implements Comparable<Nodo>{
 			}
 			System.out.println(op);
 		}
+			
+			System.out.println("--------Nº NODOS EXPLORADOS " + (listaCerrado.size()) + "------------\n\n\n\n\n\n \n");
+
 		}
+
 
 	
 }
