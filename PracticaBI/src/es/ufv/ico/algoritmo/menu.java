@@ -12,6 +12,7 @@ public class menu {
 	private static String metodo;
 	private static String heuristica;
 	private int[][] matriz;
+
 		@SuppressWarnings("resource")
 		public menu () throws IOException {
 			//System.out.println("aa");
@@ -26,16 +27,41 @@ public class menu {
 		Scanner scanner = new Scanner(System.in);
 		
 
+
+	public void inicio() {
+		pintarMenu();
+		Scanner scanner = new Scanner(System.in);
+
+		int[] valoresIntroducidos;
+		int opcion = scanner.nextInt();
+		switch (opcion) {
+		case 1:
 			System.out.println("Deber introduciar cada numero de cada fila separada por un espacio");
 			guardarMatriz();
-			
+
 			if(comprobarMatriz(matriz_inicial))
 				pintarMatriz(matriz_inicial);
-				
 
+			break;
+		case 2:
+			System.out.println("Deber introduciar cada numero de cada fila separada por un espacio");
+			guardarMatriz();
+			if(comprobarMatriz(matriz))
+				pintarMatriz(matriz);
+			break;
+		case 3:
+			System.out.println("Deber introduciar cada numero de cada fila separada por un espacio");
+			guardarMatriz();
+			if(comprobarMatriz(matriz))
+				pintarMatriz(matriz);
+
+		default:
+			System.out.println("No ha elegido una opcion valida");
+			break;
+		}
 
 	}
-	
+
 	public  void guardarMatriz() {
 
 		for(int i=0; i<3; i++) {
@@ -43,16 +69,16 @@ public class menu {
 
 			String[] row =fila.split(" ");
 			for(int j=0;j<row.length;j++) {
-			matriz_inicial[i][j] = Integer.parseInt(row[j]);
-			matriz_inicial[i][j] = Integer.parseInt(row[j]);
-			matriz_inicial[i][j] = Integer.parseInt(row[j]);
+				matriz_inicial[i][j] = Integer.parseInt(row[j]);
+				matriz_inicial[i][j] = Integer.parseInt(row[j]);
+				matriz_inicial[i][j] = Integer.parseInt(row[j]);
 			}
 			if(row[0] == row[1] || row[0] == row[2] || row[1] == row[2]) {
 				System.out.println("Lo numero deben ser distintos");
 			}
 
 		}
-		
+
 	}
 
 	public    boolean comprobarMatriz(int[][] matriz) {
@@ -62,8 +88,8 @@ public class menu {
 
 				if(matriz[i-1][j-1] == matriz[i][j])
 				{ num = false;}
-					
-				
+
+
 			}
 		}
 		return num;
@@ -112,7 +138,7 @@ public class menu {
 		setMatriz(matriz_inicial);
 		return matriz;
 	}
-	
+
 	public int[][] getMatriz() {
 		return matriz_inicial;
 	}
@@ -133,4 +159,4 @@ public class menu {
 		menu.heuristica = heuristica;
 	}
 
-	}
+}
